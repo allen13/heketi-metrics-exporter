@@ -9,6 +9,7 @@ The purpose of this exporter was to get the metrics of a Heketi Controlled Glust
 ## Usage of `heketi-metrics-exporter`
 
 Help is displayed with `-h`.
+
 | Option                   | Default             | Description
 | ------------------------ | ------------------- | -----------------
 | -help                    | -                   | Displays usage.
