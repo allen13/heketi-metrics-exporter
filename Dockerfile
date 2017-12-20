@@ -4,6 +4,6 @@ LABEL authors="Robert Tindell <Robert@Tindell.info>, CSC Rahti Team <rahti-team@
 EXPOSE 9189
 
 # Copy heketi_exporter
-COPY heketi-metrics-exporter /usr/bin/heketi_exporter
+COPY heketi-metrics-exporter /usr/bin/heketi-metrics-exporter
 
-CMD /usr/bin/heketi_exporter
+CMD /usr/bin/heketi-metrics-exporter
