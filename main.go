@@ -153,13 +153,12 @@ func NewExporter(hostname string) (*Exporter, error) {
 	}, nil
 }
 
-func versionInfo() {
-	fmt.Println(version.Print("heketi_exporter"))
-	os.Exit(0)
+func getVersionInfo() string {
+	return version.Print("heketi-metrics-exporter")
 }
 
 func init() {
-	prometheus.MustRegister(version.NewCollector("heketi_exporter"))
+	prometheus.MustRegister(version.NewCollector("heketi_metrics_exporter"))
 }
 
 func main() {
@@ -167,7 +166,7 @@ func main() {
 	// commandline arguments and environment variables
 	var (
 		metricPath    = flag.String("metrics-path", "/metrics", "URL Endpoint for metrics")
-    // listen address precedence: command line, environment, default
+		// listen address precedence: command line, environment, default
 		listenAddress = flag.String(
 		  "listen-address", 
 		  getEnv("LISTEN_ADDRESS", ":9189"),
@@ -178,7 +177,8 @@ func main() {
 	flag.Parse()
 
 	if *showVersion {
-		versionInfo()
+		fmt.Println(getVersionInfo())
+		os.Exit(0)
 	}
 
 	hostname, err := os.Hostname()
@@ -191,14 +191,14 @@ func main() {
 	}
 	prometheus.MustRegister(exporter)
 
-	log.Info("Heketi Metrics Exporter v", version.Version, " listening on ", *listenAddress)
+	log.Info("Heketi Metrics Exporter listening on ", *listenAddress)
 
 	http.Handle("/metrics", promhttp.Handler())
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(`<html>
-			<head><title>Heketi Metrics Exporter v` + version.Version + `</title></head>
+			<head><title>Heketi Metrics Exporter</title></head>
 			<body>
-			<h1>Heketi Metrics Exporter v` + version.Version + `</h1>
+			<h1>Heketi Metrics Exporter</h1>
 			<p><a href='` + *metricPath + `'>Metrics</a></p>
 			</body>
 			</html>
@@ -206,4 +206,3 @@ func main() {
 	})
 	log.Fatal(http.ListenAndServe(*listenAddress, nil))
 }
-
