@@ -8,8 +8,8 @@ items:
     annotations:
       prometheus.io/scrape: "true"
     labels:
-      app: heketi-exporter
-    name: heketi-exporter
+      app: heketi-metrics-exporter
+    name: heketi-metrics-exporter
   spec:
     clusterIP: None
     ports:
@@ -18,27 +18,25 @@ items:
       protocol: TCP
       targetPort: 9189
     selector:
-      app: heketi-exporter
+      app: heketi-metrics-exporter
 - apiVersion: v1
   kind: DeploymentConfig
   metadata:
-    name: heketi-exporter
+    name: heketi-metrics-exporter
     labels:
-      app: heketi-exporter
-      role: monitoring
+      app: heketi-metrics-exporter
   spec:
     replicas: 1
     selector:
-      app: heketi-exporter
+      app: heketi-metrics-exporter
     template:
       metadata:
         labels:
-          app: heketi-exporter
-          role: monitoring
+          app: heketi-metrics-exporter
       spec:
         containers:
-          - name: heketi-exporter
-            image: 10.0.3.47:5000/heketi-exporter:latest
+          - name: heketi-metrics-exporter
+            image: allen13/heketi-metrics-exporter:latest
             imagePullPolicy: Always
             env:
             - name: HEKETI_CLI_USER
